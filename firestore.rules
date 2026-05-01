@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // Review Validation
+    function isValidReview(data) {
+      return data.keys().hasAll(['dishId', 'userName', 'rating', 'comment', 'createdAt']) 
+        && data.dishId is string && data.dishId.size() <= 100
+        && data.userName is string && data.userName.size() <= 100
+        && data.rating is number && data.rating >= 1 && data.rating <= 5
+        && data.comment is string && data.comment.size() <= 1000
+        && data.createdAt is timestamp;
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isValidReview(incoming()) && (incoming().createdAt == request.time);
+    }
+  }
+}

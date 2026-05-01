@@ -1,0 +1,6 @@
+{
+  "name": "Zuma Hearth",
+  "description": "A modern fine-dining experience where fire meets the future, featuring AI-powered dish recommendations, real-time order tracking, and an immersive culinary atmosphere.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["AI-powered menu", "Real-time tracking", "Interactive reservations"]
+}

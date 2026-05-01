@@ -1,0 +1,43 @@
+{
+  "entities": {
+    "Review": {
+      "title": "Dish Review",
+      "description": "A review and rating left by a customer for a specific dish.",
+      "type": "object",
+      "properties": {
+        "dishId": {
+          "type": "string",
+          "description": "The unique ID of the dish being reviewed."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The authenticated user ID of the reviewer."
+        },
+        "userName": {
+          "type": "string",
+          "description": "The name of the reviewer."
+        },
+        "rating": {
+          "type": "number",
+          "description": "Rating score from 1 to 5."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Textual comment about the dish."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the review was created."
+        }
+      },
+      "required": ["dishId", "userName", "rating", "comment", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Collection of customer reviews."
+    }
+  }
+}
