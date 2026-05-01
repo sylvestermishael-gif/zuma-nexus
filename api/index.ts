@@ -23,11 +23,11 @@ app.post("/api/gemini/enhance", async (req, res) => {
   try {
     const { dishName, baseDescription } = req.body;
     const ai = getAI() as any;
-    const prompt = `You are a world-class food critic and menu writer for "Zuma Hearth", a futuristic fine-dining restaurant where "fire meets the future". 
-    Enhance the description of this dish to sound more evocative, mysterious, and mouth-watering. Use technical, culinary, and atmospheric language.
+    const prompt = `You are a world-class food critic and menu writer for "Zuma Hearth", a futuristic fine-dining restaurant. 
+    Enhance the description of this dish to sound more evocative and mysterious.
     Dish: ${dishName}
     Base: ${baseDescription}
-    Keep it to 2-3 sentences.`;
+    Keep it to 2 sentences.`;
 
     const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
@@ -35,7 +35,7 @@ app.post("/api/gemini/enhance", async (req, res) => {
     res.json({ text: response.text() });
   } catch (error: any) {
     console.error("Gemini Error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(200).json({ text: req.body.baseDescription || "A masterfully crafted signature selection." });
   }
 });
 
@@ -44,8 +44,7 @@ app.post("/api/gemini/recommend", async (req, res) => {
     const { mood, dishes } = req.body;
     const ai = getAI() as any;
     const dishList = dishes.map((d: any) => `${d.name}: ${d.description}`).join('\n');
-    const prompt = `The customer is feeling "${mood}". Based on the following menu from Zuma Hearth, recommend 3 dishes that match this mood. 
-    Explain briefly why for each. Be poetic and high-end.
+    const prompt = `The customer is feeling "${mood}". Recommend 3 dishes from this menu.
     Menu:
     ${dishList}`;
 
@@ -55,7 +54,25 @@ app.post("/api/gemini/recommend", async (req, res) => {
     res.json({ text: response.text() });
   } catch (error: any) {
     console.error("Gemini Error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(200).json({ text: "I recommend our signature Obsidian Wagyu for your current state." });
+  }
+});
+
+app.post("/api/gemini/chat", async (req, res) => {
+  try {
+    const { userMessage } = req.body;
+    const ai = getAI() as any;
+    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
+    const prompt = `You are the concierge AI for Zuma Hearth. Stay in character.
+    User says: "${userMessage}"`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    res.json({ text: response.text() });
+  } catch (error: any) {
+    console.error("Gemini Chat Error:", error);
+    res.status(200).json({ text: "The signal is weak here in Abuja. How may I assist you with your reservation?" });
   }
 });
 

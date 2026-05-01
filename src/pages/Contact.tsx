@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, Phone, Mail, Instagram, Facebook, Send, Sparkles, User, Bot, X } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
+import { getChatResponse } from '../services/geminiService';
 import { cn } from '../lib/utils';
 
 export default function Contact() {
@@ -30,17 +30,8 @@ export default function Contact() {
     setIsTyping(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: `You are the concierge AI for Zuma Hearth, a futuristic fine-dining restaurant.
-        You are sophisticated, helpful, and slightly mysterious. 
-        Tone: Modern, tech-heavy, but welcoming.
-        User says: "${userMsg}"
-        Keep response short and helpful.`,
-      });
-
-      setMessages(prev => [...prev, { role: 'bot', text: response.text || "Connection severed. Please retry." }]);
+      const response = await getChatResponse(userMsg);
+      setMessages(prev => [...prev, { role: 'bot', text: response }]);
     } catch (err) {
       setMessages(prev => [...prev, { role: 'bot', text: "Signal interference detected. We are located at 123 Obsidian Row, Abuja." }]);
     } finally {

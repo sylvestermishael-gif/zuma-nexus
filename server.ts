@@ -69,6 +69,24 @@ async function startServer() {
     }
   });
 
+  app.post("/api/gemini/chat", async (req, res) => {
+    try {
+      const { userMessage } = req.body;
+      const ai = getAI() as any;
+      const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const prompt = `You are the concierge AI for Zuma Hearth, a futuristic fine-dining restaurant.
+      User says: "${userMessage}"
+      Respond in character as Zuma's concierge.`;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      res.json({ text: response.text() });
+    } catch (error: any) {
+      console.error("Gemini Error:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
