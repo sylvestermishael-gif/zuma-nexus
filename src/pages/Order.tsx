@@ -43,9 +43,9 @@ export default function Order() {
 
   const config = {
     reference: (new Date()).getTime().toString(),
-    email: formData.email,
+    email: formData.email || user?.email || 'guest@zumahearth.com',
     amount: grandTotal * 100, // Paystack expects amount in Kobo
-    publicKey: (import.meta as any).env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_placeholder',
+    publicKey: (import.meta as any).env.VITE_PAYSTACK_PUBLIC_KEY || '',
   };
 
   const onSuccess = (reference: any) => {
@@ -69,7 +69,20 @@ export default function Order() {
     e.preventDefault();
     
     if (formData.payment === 'card') {
-      initializePayment({ onSuccess, onClose });
+      if (!config.publicKey || config.publicKey === 'pk_test_placeholder') {
+        alert("Payment System Offline: VITE_PAYSTACK_PUBLIC_KEY is not configured in environment settings.");
+        setIsOrdering(false);
+        return;
+      }
+
+      setIsOrdering(true);
+      try {
+        initializePayment({ onSuccess, onClose });
+      } catch (err) {
+        console.error("Payment Initialization Error:", err);
+        alert("Nexus Protocol Failure: Could not initialize payment gateway.");
+        setIsOrdering(false);
+      }
     } else {
       // For local payments or other methods
       setIsOrdering(true);

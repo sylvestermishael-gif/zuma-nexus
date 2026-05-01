@@ -32,9 +32,9 @@ export default function Reservations() {
 
   const config = {
     reference: (new Date()).getTime().toString(),
-    email: formData.email,
+    email: formData.email || 'guest@zumahearth.com',
     amount: totalAmount * 100, // Kobo
-    publicKey: (import.meta as any).env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_placeholder',
+    publicKey: (import.meta as any).env.VITE_PAYSTACK_PUBLIC_KEY || '',
   };
 
   const initializePayment = usePaystackPayment(config);
@@ -53,11 +53,24 @@ export default function Reservations() {
 
   const handleComplete = (e: FormEvent) => {
     e.preventDefault();
+    
+    if (!config.publicKey || config.publicKey === 'pk_test_placeholder') {
+      alert("Payment System Offline: VITE_PAYSTACK_PUBLIC_KEY is not configured in environment settings.");
+      setIsProcessing(false);
+      return;
+    }
+
     setIsProcessing(true);
-    initializePayment({ 
-      onSuccess: handlePaymentSuccess, 
-      onClose: handlePaymentClose 
-    });
+    try {
+      initializePayment({ 
+        onSuccess: handlePaymentSuccess, 
+        onClose: handlePaymentClose 
+      });
+    } catch (err) {
+      console.error("Payment Initialization Error:", err);
+      alert("Nexus Protocol Failure: Could not initialize payment gateway.");
+      setIsProcessing(false);
+    }
   };
 
   return (

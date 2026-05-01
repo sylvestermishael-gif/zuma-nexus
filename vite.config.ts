@@ -8,7 +8,8 @@ export default defineConfig(({mode}) => {
   return {
     plugins: [react(), tailwindcss()],
     define: {
-      'process.env.GENAI_API_KEY': JSON.stringify(env.GENAI_API_KEY),
+      'process.env.GENAI_API_KEY': JSON.stringify(process.env.GENAI_API_KEY),
+      'import.meta.env.VITE_PAYSTACK_PUBLIC_KEY': JSON.stringify(process.env.VITE_PAYSTACK_PUBLIC_KEY),
     },
     resolve: {
       alias: {
