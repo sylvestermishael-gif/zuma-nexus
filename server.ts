@@ -19,25 +19,30 @@ async function startServer() {
   // Gemini API Proxy
   let aiInstance: GoogleGenAI | null = null;
   function getAI() {
-    if (!aiInstance) {
-      const apiKey = process.env.GENAI_API_KEY || process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error("GENAI_API_KEY is not defined");
+    try {
+      if (!aiInstance) {
+        const apiKey = process.env.GENAI_API_KEY || process.env.GEMINI_API_KEY;
+        if (!apiKey) return null;
+        aiInstance = new GoogleGenAI({ apiKey });
       }
-      aiInstance = new GoogleGenAI({ apiKey });
+      return aiInstance;
+    } catch (e) {
+      return null;
     }
-    return aiInstance;
   }
 
   app.post("/api/gemini/enhance", async (req, res) => {
     try {
       const { dishName, baseDescription } = req.body;
       const ai = getAI() as any;
-      const prompt = `You are a world-class food critic and menu writer for "Zuma Hearth", a futuristic fine-dining restaurant where "fire meets the future". 
-      Enhance the description of this dish to sound more evocative, mysterious, and mouth-watering. Use technical, culinary, and atmospheric language.
+      if (!ai) {
+        return res.json({ text: baseDescription || "A masterfully crafted signature selection." });
+      }
+      const prompt = `You are a world-class food critic and menu writer for "Zuma Hearth", a futuristic fine-dining restaurant. 
+      Enhance the description of this dish to sound more evocative, mysterious, and mouth-watering.
       Dish: ${dishName}
       Base: ${baseDescription}
-      Keep it to 2-3 sentences. Do not include the name of the dish in the enhancement if possible.`;
+      Keep it to 2 sentences.`;
 
       const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
       const result = await model.generateContent(prompt);

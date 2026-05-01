@@ -31,8 +31,10 @@ export default function Login() {
         setError("Protocol aborted: Verification window was closed by operator.");
       } else if (err.code === 'auth/internal-error') {
         setError("Nexus conflict: Please refresh the protocol and try again.");
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError("Domain access denied: Verify that this domain is authorized in Firebase console.");
       } else {
-        setError("Security protocol failed. Please re-authenticate.");
+        setError("Security protocol failed. Please re-authenticate (Check Firebase console if deploying).");
       }
       console.error(err);
     } finally {
