@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Calendar, Clock, Users, ChevronRight, CheckCircle, Flame } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { Calendar, Clock, Users, ChevronRight, CheckCircle, Flame, CreditCard, ShieldCheck } from 'lucide-react';
+import { cn, formatCurrency } from '../lib/utils';
+import { usePaystackPayment } from 'react-paystack';
+
+const SEAT_PRICE = 5000;
 
 export default function Reservations() {
   const [step, setStep] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     date: '',
     time: '',
@@ -19,9 +23,41 @@ export default function Reservations() {
   const guestsOptions = ['1', '2', '3', '4', '5', '6', '7+'];
   const timeOptions = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00'];
 
+  const getGuestCount = () => {
+    const val = formData.guests;
+    return val === '7+' ? 7 : parseInt(val);
+  };
+
+  const totalAmount = getGuestCount() * SEAT_PRICE;
+
+  const config = {
+    reference: (new Date()).getTime().toString(),
+    email: formData.email,
+    amount: totalAmount * 100, // Kobo
+    publicKey: (import.meta as any).env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_placeholder',
+  };
+
+  const initializePayment = usePaystackPayment(config);
+
+  const handlePaymentSuccess = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setStep(3);
+      setIsProcessing(false);
+    }, 1500);
+  };
+
+  const handlePaymentClose = () => {
+    setIsProcessing(false);
+  };
+
   const handleComplete = (e: FormEvent) => {
     e.preventDefault();
-    setStep(3);
+    setIsProcessing(true);
+    initializePayment({ 
+      onSuccess: handlePaymentSuccess, 
+      onClose: handlePaymentClose 
+    });
   };
 
   return (
@@ -135,8 +171,23 @@ export default function Reservations() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="p-8 md:p-12"
+                className="p-8 md:p-12 overflow-y-auto max-h-[70vh]"
               >
+                <div className="mb-10 p-6 glass-effect rounded-3xl border-ember/20 border flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-ember block mb-1">Reservation Value</span>
+                    <div className="text-2xl font-mono text-white tracking-tighter">
+                      {formatCurrency(totalAmount)}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-white/40 block mb-1">Allocation</span>
+                    <div className="text-xs font-mono text-white/60">
+                      {formData.guests} Seats × {formatCurrency(SEAT_PRICE)}
+                    </div>
+                  </div>
+                </div>
+
                 <form onSubmit={handleComplete} className="space-y-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
@@ -174,13 +225,26 @@ export default function Reservations() {
                     />
                   </div>
 
+                  <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-start gap-3">
+                    <ShieldCheck className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
+                    <p className="text-[10px] text-blue-200/60 leading-relaxed font-mono uppercase tracking-wider">
+                      Securing your seat requires full advance settlement via encrypted protocol. Refund window closes 24h prior to induction.
+                    </p>
+                  </div>
+
                   <div className="flex items-center justify-between pt-8">
                     <button type="button" onClick={() => setStep(1)} className="text-white/40 font-mono text-[10px] uppercase tracking-widest hover:text-white transition-colors">Go Back</button>
                     <button
                       type="submit"
-                      className="px-10 py-5 bg-white text-black font-bold uppercase tracking-widest hover:bg-ember transition-all"
+                      disabled={isProcessing}
+                      className="px-10 py-5 bg-white text-black font-bold uppercase tracking-widest hover:bg-ember transition-all flex items-center gap-3 disabled:opacity-50"
                     >
-                      Initialize Protocol
+                      {isProcessing ? 'Synchronizing...' : (
+                        <>
+                          <CreditCard className="w-4 h-4" />
+                          Complete Induction
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
