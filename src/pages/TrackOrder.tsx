@@ -17,6 +17,10 @@ L.Icon.Default.mergeOptions({
 
 const DEFAULT_CENTER: [number, number] = [37.7749, -122.4194]; // San Francisco as fallback
 
+const MapContainerAny = MapContainer as any;
+const TileLayerAny = TileLayer as any;
+const MarkerAny = Marker as any;
+
 export default function TrackOrder() {
   const { orderId } = useParams();
   const [courierPos, setCourierPos] = useState<[number, number]>([37.78, -122.42]);
@@ -60,20 +64,20 @@ export default function TrackOrder() {
     <div className="pt-20 min-h-screen bg-black flex flex-col md:flex-row h-screen overflow-hidden">
       {/* Left: Map */}
       <div className="flex-1 relative order-2 md:order-1 h-1/2 md:h-full border-r border-white/5">
-        <MapContainer 
+        <MapContainerAny 
           center={DEFAULT_CENTER} 
           zoom={13} 
           style={{ height: '100%', width: '100%' }}
           zoomControl={false}
         >
-          <TileLayer
+          <TileLayerAny
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={destination}>
+          <MarkerAny position={destination}>
             <Popup>Your Destination</Popup>
-          </Marker>
-          <Marker 
+          </MarkerAny>
+          <MarkerAny 
             position={courierPos} 
             icon={new L.Icon({
               iconUrl: 'https://cdn-icons-png.flaticon.com/512/3246/3246194.png',
@@ -82,9 +86,9 @@ export default function TrackOrder() {
             })}
           >
             <Popup>Chef Emissary (In Transit)</Popup>
-          </Marker>
+          </MarkerAny>
           <MapUpdater center={courierPos} />
-        </MapContainer>
+        </MapContainerAny>
 
         {/* Overlay Labels */}
         <div className="absolute bottom-8 left-8 z-[400] space-y-4">
