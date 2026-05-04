@@ -2,13 +2,51 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
-import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
+import admin from "firebase-admin";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import { getAuth } from "firebase-admin/auth";
+import { Resend } from "resend";
+import fs from "fs";
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Initialize Firebase Admin
+let adminApp: admin.app.App;
+let db: any;
+let authAdmin: any;
+let databaseId: string | undefined = undefined;
+
+try {
+  const configPath = path.join(process.cwd(), "firebase-applet-config.json");
+  let projectId = process.env.FIREBASE_PROJECT_ID;
+  
+  if (fs.existsSync(configPath)) {
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    projectId = config.projectId;
+    databaseId = config.firestoreDatabaseId;
+  }
+
+  adminApp = admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    projectId: projectId
+  });
+
+  // Try custom database
+  db = getFirestore(adminApp, databaseId);
+  authAdmin = getAuth(adminApp);
+} catch (error: any) {
+  console.error("Nexus initialization failed:", error);
+  // Total fallback
+  adminApp = admin.apps.length ? admin.app() : admin.initializeApp();
+  db = getFirestore(adminApp);
+  authAdmin = getAuth(adminApp);
+}
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function startServer() {
   const app = express();
@@ -16,81 +54,35 @@ async function startServer() {
 
   app.use(express.json());
 
-  // Gemini API Proxy
-  let aiInstance: GoogleGenAI | null = null;
-  function getAI() {
-    try {
-      if (!aiInstance) {
-        const apiKey = process.env.GENAI_API_KEY || process.env.GEMINI_API_KEY;
-        if (!apiKey) return null;
-        aiInstance = new GoogleGenAI({ apiKey });
+  // Verify Connectivity & Fallback if necessary
+  try {
+    await db.collection("system_check").doc("status").set({ 
+      online: true, 
+      timestamp: FieldValue.serverTimestamp() 
+    }, { merge: true });
+    console.log("Nexus Link: Stable connection verified.");
+  } catch (err: any) {
+    const isNotFoundError = err.message.includes("NOT_FOUND") || err.code === 5;
+    const isPermissionDenied = err.message.includes("PERMISSION_DENIED") || err.code === 7;
+
+    if ((isNotFoundError || isPermissionDenied) && databaseId) {
+      console.warn(`Nexus Alert: Database [${databaseId}] is ${isNotFoundError ? 'missing' : 'restricted'}. Rerouting to (default) database.`);
+      db = getFirestore(adminApp);
+      try {
+        await db.collection("system_check").doc("status").set({ 
+          online: true, 
+          timestamp: FieldValue.serverTimestamp(),
+          rerouted: true,
+          previousError: err.message
+        }, { merge: true });
+        console.log("Nexus Link: Rerouted connection stable.");
+      } catch (innerErr: any) {
+        console.error("Nexus Link: Total database failure. Check Firebase Project setup.", innerErr.message);
       }
-      return aiInstance;
-    } catch (e) {
-      return null;
+    } else {
+      console.error("Nexus Link: Connectivity check error:", err.message);
     }
   }
-
-  app.post("/api/gemini/enhance", async (req, res) => {
-    try {
-      const { dishName, baseDescription } = req.body;
-      const ai = getAI() as any;
-      if (!ai) {
-        return res.json({ text: baseDescription || "A masterfully crafted signature selection." });
-      }
-      const prompt = `You are a world-class food critic and menu writer for "Zuma Hearth", a futuristic fine-dining restaurant. 
-      Enhance the description of this dish to sound more evocative, mysterious, and mouth-watering.
-      Dish: ${dishName}
-      Base: ${baseDescription}
-      Keep it to 2 sentences.`;
-
-      const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      res.json({ text: response.text() });
-    } catch (error: any) {
-      console.error("Gemini Error:", error);
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  app.post("/api/gemini/recommend", async (req, res) => {
-    try {
-      const { mood, dishes } = req.body;
-      const ai = getAI() as any;
-      const dishList = dishes.map((d: any) => `${d.name}: ${d.description}`).join('\n');
-      const prompt = `The customer is feeling "${mood}". Based on the following menu from Zuma Hearth, recommend 3 dishes that match this mood. 
-      Explain briefly why for each. Be poetic and high-end.
-      Menu:
-      ${dishList}`;
-
-      const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      res.json({ text: response.text() });
-    } catch (error: any) {
-      console.error("Gemini Error:", error);
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  app.post("/api/gemini/chat", async (req, res) => {
-    try {
-      const { userMessage } = req.body;
-      const ai = getAI() as any;
-      const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const prompt = `You are the concierge AI for Zuma Hearth, a futuristic fine-dining restaurant.
-      User says: "${userMessage}"
-      Respond in character as Zuma's concierge.`;
-
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      res.json({ text: response.text() });
-    } catch (error: any) {
-      console.error("Gemini Error:", error);
-      res.status(500).json({ error: error.message });
-    }
-  });
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

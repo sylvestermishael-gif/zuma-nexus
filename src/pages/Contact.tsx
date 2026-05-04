@@ -1,44 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import type { FormEvent } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, Phone, Mail, Instagram, Facebook, Send, Sparkles, User, Bot, X } from 'lucide-react';
-import { getChatResponse } from '../services/geminiService';
-import { cn } from '../lib/utils';
+import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react';
 
 export default function Contact() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: 'user' | 'bot'; text: string }[]>([
-    { role: 'bot', text: 'Welcome to the Zuma Matrix. I am Gemini-Ember. How can I assist your culinary induction?' }
-  ]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages, isTyping]);
-
-  const handleSendMessage = async (e?: FormEvent) => {
-    e?.preventDefault();
-    if (!input.trim() || isTyping) return;
-
-    const userMsg = input;
-    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
-    setInput('');
-    setIsTyping(true);
-
-    try {
-      const response = await getChatResponse(userMsg);
-      setMessages(prev => [...prev, { role: 'bot', text: response }]);
-    } catch (err) {
-      setMessages(prev => [...prev, { role: 'bot', text: "Signal interference detected. We are located at 123 Obsidian Row, Abuja." }]);
-    } finally {
-      setIsTyping(false);
-    }
-  };
-
   return (
     <div className="pt-24 pb-20 bg-obsidian min-h-screen px-6 relative overflow-hidden">
       {/* Background Atmosphere */}
@@ -113,74 +75,6 @@ export default function Contact() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* AI Chatbot FAB */}
-      <div className="fixed bottom-10 right-10 z-[100]">
-        <AnimatePresence>
-          {isChatOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="absolute bottom-24 right-0 w-80 md:w-96 bg-obsidian/40 backdrop-blur-3xl border border-white/10 rounded-[2rem] shadow-2xl flex flex-col overflow-hidden"
-            >
-              <div className="p-6 bg-white text-black flex justify-between items-center">
-                 <div className="flex items-center gap-3">
-                   <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-orange-400 to-purple-600 animate-pulse" />
-                   <span className="text-[10px] font-bold uppercase tracking-widest">Gemini Concierge</span>
-                 </div>
-                 <button onClick={() => setIsChatOpen(false)} className="p-1 hover:rotate-90 transition-transform"><X className="w-5 h-5" /></button>
-              </div>
-              
-              <div ref={scrollRef} className="flex-1 h-96 overflow-y-auto p-6 space-y-6 scrollbar-hide">
-                {messages.map((msg, idx) => (
-                  <div key={idx} className={cn("flex gap-4", msg.role === 'user' ? "flex-row-reverse" : "")}>
-                    <div className={cn(
-                      "w-8 h-8 rounded-full flex items-center justify-center shrink-0 border",
-                      msg.role === 'bot' ? "bg-white/5 border-white/10 text-ember" : "bg-white border-white text-black"
-                    )}>
-                      {msg.role === 'bot' ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                    </div>
-                    <div className={cn(
-                      "p-4 rounded-2xl text-[10px] uppercase tracking-widest leading-relaxed max-w-[80%]",
-                      msg.role === 'bot' ? "bg-white/5 text-white/60" : "bg-white/10 border border-white/20 text-white"
-                    )}>
-                      {msg.text}
-                    </div>
-                  </div>
-                ))}
-                {isTyping && (
-                  <div className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 text-ember flex items-center justify-center">
-                       <Bot className="w-4 h-4 animate-pulse" />
-                    </div>
-                    <div className="p-4 bg-white/5 text-white/20 text-[8px] uppercase tracking-widest animate-pulse">Consulting Ember Logs...</div>
-                  </div>
-                )}
-              </div>
-
-              <form onSubmit={handleSendMessage} className="p-4 border-t border-white/5 flex gap-3">
-                <input 
-                  type="text" 
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Transmit Signal..." 
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-6 py-3 text-[10px] uppercase tracking-widest focus:outline-none focus:border-ember placeholder:text-white/20 transition-all font-mono"
-                />
-                <button type="submit" className="w-12 h-12 bg-white text-black rounded-xl hover:bg-ember transition-all flex items-center justify-center"><Send className="w-4 h-4" /></button>
-              </form>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <button 
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          className="w-20 h-20 bg-white text-black rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.15)] hover:scale-110 transition-transform relative z-10 group"
-        >
-          <Bot className="w-10 h-10 group-hover:rotate-12 transition-transform" />
-          <div className="absolute inset-0 rounded-full bg-white animate-ping opacity-10 pointer-events-none" />
-        </button>
       </div>
     </div>
   );

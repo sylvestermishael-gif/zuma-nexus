@@ -32,12 +32,27 @@
         }
       },
       "required": ["dishId", "userName", "rating", "comment", "createdAt"]
+    },
+    "OTPCode": {
+      "title": "Email OTP",
+      "description": "Transient storage for email verification codes.",
+      "type": "object",
+      "properties": {
+        "otp": { "type": "string" },
+        "expiresAt": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["otp", "expiresAt"]
     }
   },
   "firestore": {
     "/reviews/{reviewId}": {
       "schema": "Review",
       "description": "Collection of customer reviews."
+    },
+    "/otp_codes/{email}": {
+      "schema": "OTPCode",
+      "description": "Private collection for verification codes (System access only)."
     }
   }
 }

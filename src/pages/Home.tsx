@@ -74,23 +74,9 @@ export default function Home() {
               <span className="font-bold not-italic text-white/90">the future.</span>
             </motion.h1>
             <p className="max-w-xl mx-auto text-base md:text-lg text-white/40 font-light mb-12 leading-relaxed">
-              Experience the convergence of primordial fire and molecular precision. A culinary synthesis powered by Gemini Intelligence.
+              Experience the convergence of primordial fire and molecular precision. A culinary synthesis of tradition and innovation.
             </p>
             
-            {/* AI Status Badge */}
-            <div className="mb-12 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl flex items-center gap-4 w-fit mx-auto shadow-2xl">
-              <div className="relative">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-400 to-purple-600 animate-pulse"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                </div>
-              </div>
-              <div className="text-left">
-                <p className="text-[8px] text-white/40 uppercase tracking-widest leading-none mb-1">Gemini 3 Active</p>
-                <p className="text-[10px] font-medium italic text-white/80">"Tonight's menu synchronized with local harvest."</p>
-              </div>
-            </div>
-
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link
                 to="/reservations"

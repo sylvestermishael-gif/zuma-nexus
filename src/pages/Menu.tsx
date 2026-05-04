@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Sparkles, ShoppingBag, X, Plus, Minus, Info } from 'lucide-react';
+import { Search, ShoppingBag, X, Plus, Minus, Info } from 'lucide-react';
 import { MENU_DATA, Dish } from '../constants';
-import { getMoodRecommendations, getEnhancedDescription } from '../services/geminiService';
 import { cn, formatCurrency } from '../lib/utils';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
@@ -11,13 +10,9 @@ import { DishReviews } from '../components/DishReviews';
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [mood, setMood] = useState('');
-  const [recommendations, setRecommendations] = useState<string | null>(null);
-  const [isAiLoading, setIsAiLoading] = useState(false);
   const { cart, addToCart, removeFromCart, updateQuantity, total } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
-  const [enhancedDesc, setEnhancedDesc] = useState<string | null>(null);
 
   const categories = ['all', 'primordial', 'elemental', 'afterglow', 'libations'];
 
@@ -36,19 +31,8 @@ export default function Menu() {
     return matchesCategory && matchesSearch;
   });
 
-  const handleMoodAnalysis = async () => {
-    if (!mood) return;
-    setIsAiLoading(true);
-    const recs = await getMoodRecommendations(mood, MENU_DATA);
-    setRecommendations(recs);
-    setIsAiLoading(false);
-  };
-
-  const handleOpenDish = async (dish: Dish) => {
+  const handleOpenDish = (dish: Dish) => {
     setSelectedDish(dish);
-    setEnhancedDesc(null);
-    const enhanced = await getEnhancedDescription(dish.name, dish.description);
-    setEnhancedDesc(enhanced);
   };
 
   return (
@@ -71,47 +55,6 @@ export default function Menu() {
         <h1 className="text-6xl md:text-8xl font-light italic text-center uppercase tracking-tighter mb-12 decoration-ember/20 underline underline-offset-8">
           The <span className="font-bold not-italic text-white/90">Sequence.</span>
         </h1>
-
-        {/* AI Recommender */}
-        <div className="glass-effect p-10 rounded-[2.5rem] mb-20 border-white/10 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-10">
-            <Sparkles className="w-24 h-24 text-ember" />
-          </div>
-          <div className="flex items-center gap-3 mb-8 relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-500 to-purple-600 animate-pulse flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
-            <h3 className="text-[10px] font-mono uppercase tracking-[0.3em] text-ember">Gemini AI Sommelier</h3>
-          </div>
-          <div className="flex flex-col md:flex-row gap-4 relative">
-            <input
-              type="text"
-              placeholder="How are you feeling tonight? (e.g. Adventurous, Moody, Electric...)"
-              className="flex-1 bg-white/5 border border-white/10 px-8 py-5 rounded-2xl focus:outline-none focus:border-ember transition-all text-white placeholder:text-white/20 text-sm"
-              value={mood}
-              onChange={(e) => setMood(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleMoodAnalysis()}
-            />
-            <button
-              onClick={handleMoodAnalysis}
-              disabled={isAiLoading}
-              className="px-10 py-5 bg-white text-black font-bold uppercase tracking-widest hover:bg-ember transition-all disabled:opacity-50 flex items-center justify-center gap-2 group"
-            >
-              {isAiLoading ? 'Analyzing...' : 'Calibrate Service'}
-            </button>
-          </div>
-          <AnimatePresence>
-            {recommendations && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="mt-10 p-8 bg-white/5 border-l-2 border-ember rounded-r-2xl text-white/60 font-light italic leading-relaxed whitespace-pre-wrap text-lg"
-              >
-                {recommendations}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
 
         {/* Filters & Search */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-10 mb-16 px-4">
@@ -325,25 +268,6 @@ export default function Menu() {
                     <div>
                       <h4 className="text-[10px] font-mono uppercase tracking-widest text-white/30 mb-2">The Base</h4>
                       <p className="text-white/70 font-light leading-relaxed">{selectedDish.description}</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-[10px] font-mono uppercase tracking-widest text-ember mb-2 flex items-center gap-2">
-                        <Sparkles className="w-3 h-3" /> Gemini Enhancement
-                      </h4>
-                      {enhancedDesc ? (
-                         <motion.p 
-                          initial={{ opacity: 0 }} 
-                          animate={{ opacity: 1 }} 
-                          className="text-white/90 font-light italic leading-relaxed text-lg"
-                        >
-                          "{enhancedDesc}"
-                        </motion.p>
-                      ) : (
-                        <div className="h-20 flex items-center gap-2 text-white/20 animate-pulse">
-                          <div className="w-full h-4 bg-white/5 rounded" />
-                        </div>
-                      )}
                     </div>
                   </div>
 

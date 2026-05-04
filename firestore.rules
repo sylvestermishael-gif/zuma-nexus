@@ -32,5 +32,9 @@ service cloud.firestore {
       allow read: if true;
       allow create: if isValidReview(incoming()) && (incoming().createdAt == request.time);
     }
+
+    match /otp_codes/{email} {
+      allow read, write: if false; // Only accessible via Admin SDK
+    }
   }
 }
