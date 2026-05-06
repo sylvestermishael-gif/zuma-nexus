@@ -22,10 +22,10 @@ export default function Home() {
           <img 
             src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2070" 
             alt="Zuma Hearth Ambience" 
-            className="w-full h-full object-cover opacity-40 grayscale"
+            className="w-full h-full object-cover opacity-60"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
           <div className="absolute inset-0 bg-radial-gradient(circle at center, transparent 0%, black 100%) opacity-60" />
         </div>
 
@@ -70,11 +70,11 @@ export default function Home() {
               className="text-6xl md:text-8xl lg:text-9xl font-light italic leading-[0.85] tracking-tighter mb-8 decoration-ember/20 underline underline-offset-8 cursor-pointer select-none"
               whileTap={{ scale: 0.98 }}
             >
-              Where <span className={`transition-colors duration-500 ${titleColor}`}>fire</span> meets <br />
-              <span className="font-bold not-italic text-white/90">the future.</span>
+              Classic <span className={`transition-colors duration-500 ${titleColor}`}>flavors</span> meets <br />
+              <span className="font-bold not-italic text-white/90">modern art.</span>
             </motion.h1>
             <p className="max-w-xl mx-auto text-base md:text-lg text-white/40 font-light mb-12 leading-relaxed">
-              Experience the convergence of primordial fire and molecular precision. A culinary synthesis of tradition and innovation.
+              Experience the perfect blend of traditional wood-fired cooking and modern culinary innovation.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -82,13 +82,13 @@ export default function Home() {
                 to="/reservations"
                 className="px-8 py-4 bg-white text-black font-bold uppercase tracking-widest hover:bg-ember transition-all duration-300"
               >
-                Secure Table
+                Book a Table
               </Link>
               <Link
                 to="/menu"
                 className="px-8 py-4 bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors uppercase tracking-widest font-bold"
               >
-                The Manifesto
+                Our Menu
               </Link>
             </div>
           </motion.div>
@@ -127,7 +127,7 @@ export default function Home() {
                 {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
               </div>
               <span className="text-xs font-mono uppercase tracking-widest text-white/50">Chef's Selection</span>
-              <p className="text-lg font-display uppercase tracking-tight italic mt-1 text-ember">Obsidian Glazed Wagyu</p>
+              <p className="text-lg font-display uppercase tracking-tight italic mt-1 text-ember">Charcoal Glazed Wagyu</p>
             </div>
           </div>
 
@@ -139,10 +139,10 @@ export default function Home() {
             </h2>
             <div className="space-y-6 text-white/60 text-lg leading-relaxed font-light">
               <p>
-                Founded by Chef Aris Thorne, Zuma Hearth was born from a singular vision: to strip away the distractions of modern life and return to the primary element—fire.
+                Founded by Chef Aris Thorne, Zuma Hearth was born from a singular vision: to return to the heart of cooking—the fire.
               </p>
               <p>
-                We use proprietary "Hearth-Sync" technology to maintain precise temperature gradients within our custom-built volcanic stone ovens, ensuring each ingredient is transformed, never forced.
+                We use custom-built wood-fired ovens to bring out the boldest flavors in every ingredient, blending time-honored techniques with a modern touch.
               </p>
             </div>
             <Link to="/story" className="inline-flex items-center gap-4 mt-10 text-ember uppercase font-mono text-sm tracking-[0.2em] group">
@@ -163,20 +163,20 @@ export default function Home() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
-              title: "The Chef's Counter",
-              desc: "An intimate 8-seat journey through 12 courses, personally served by our culinary leads.",
-              img: "https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=2070",
+              title: "The Chef's Table",
+              desc: "An exclusive dining experience with 12 courses, served directly by our master chefs.",
+              img: "https://images.unsplash.com/photo-1550966848-185d9afbcc4f?auto=format&fit=crop&q=80&w=2070",
               icon: Users
             },
             {
-              title: "Molecular Libations",
-              desc: "A cocktail program built on structure and surprise. Smoked infusions and cryogenic classics.",
+              title: "Signature Cocktails",
+              desc: "A creative bar program featuring smoke-infused spirits and artisanal classics.",
               img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2070",
               icon: Flame
             },
             {
-              title: "Late Night Ember",
-              desc: "After-hours lounge featuring ambient tech and curated small plates until dawn.",
+              title: "Late Night Lounge",
+              desc: "Elegant environment featuring great music and light bites served until the early hours.",
               img: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&q=80&w=2069",
               icon: Clock
             }
@@ -191,7 +191,7 @@ export default function Home() {
             >
               <img 
                 src={item.img} 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale opacity-60" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80" 
                 alt={item.title}
                 referrerPolicy="no-referrer"
               />
@@ -218,12 +218,12 @@ export default function Home() {
            viewport={{ once: true }}
            className="max-w-4xl mx-auto"
         >
-          <h2 className="text-5xl md:text-7xl font-display font-bold uppercase italic mb-10 tracking-tighter">Your table is <br /><span className="text-ember">calling</span>.</h2>
+          <h2 className="text-5xl md:text-7xl font-display font-bold uppercase italic mb-10 tracking-tighter text-white">Join us for <br /><span className="text-ember">dinner</span>.</h2>
           <Link
             to="/reservations"
             className="inline-block px-12 py-6 bg-ember text-black font-bold uppercase tracking-[0.3em] hover:bg-white transition-all duration-300 ember-glow"
           >
-            Reservation Required
+            Book Your Table
           </Link>
         </motion.div>
       </section>

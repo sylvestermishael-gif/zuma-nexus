@@ -68,7 +68,7 @@ export default function Reservations() {
       });
     } catch (err) {
       console.error("Payment Initialization Error:", err);
-      alert("Nexus Protocol Failure: Could not initialize payment gateway.");
+      alert("Payment System Failure: Could not initialize payment gateway.");
       setIsProcessing(false);
     }
   };
@@ -83,11 +83,11 @@ export default function Reservations() {
 
       <div className="max-w-4xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-ember mb-4 block">Temporal Alignment</span>
+          <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-ember mb-4 block">Reservation Details</span>
           <h1 className="text-5xl md:text-7xl font-light italic tracking-tighter uppercase mb-6 decoration-ember/20 underline underline-offset-8">
-            The <span className="font-bold not-italic text-white/90">Induction.</span>
+            Book a <span className="font-bold not-italic text-white/90">Table.</span>
           </h1>
-          <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest">Reservation is mandated for the hearth experience</p>
+          <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest">Required for your culinary visit</p>
         </div>
 
         <div className="glass-effect rounded-[2.5rem] overflow-hidden shadow-2xl relative border-white/10">
@@ -188,13 +188,13 @@ export default function Reservations() {
               >
                 <div className="mb-10 p-6 glass-effect rounded-3xl border-ember/20 border flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-ember block mb-1">Reservation Value</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-ember block mb-1">Total Amount</span>
                     <div className="text-2xl font-mono text-white tracking-tighter">
                       {formatCurrency(totalAmount)}
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-white/40 block mb-1">Allocation</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-white/40 block mb-1">Breakdown</span>
                     <div className="text-xs font-mono text-white/60">
                       {formData.guests} Seats × {formatCurrency(SEAT_PRICE)}
                     </div>
@@ -204,7 +204,7 @@ export default function Reservations() {
                 <form onSubmit={handleComplete} className="space-y-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 ml-2">Full Identity</label>
+                       <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 ml-2">Full Name</label>
                        <input 
                          required
                          type="text" 
@@ -215,7 +215,7 @@ export default function Reservations() {
                        />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 ml-2">Communication Channel</label>
+                       <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 ml-2">Contact Information</label>
                        <input 
                          required
                          type="email" 
@@ -241,7 +241,7 @@ export default function Reservations() {
                   <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-start gap-3">
                     <ShieldCheck className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
                     <p className="text-[10px] text-blue-200/60 leading-relaxed font-mono uppercase tracking-wider">
-                      Securing your seat requires full advance settlement via encrypted protocol. Refund window closes 24h prior to induction.
+                      Securing your seat requires full advance payment. Refunds are available up to 24 hours before your booking.
                     </p>
                   </div>
 
@@ -252,10 +252,10 @@ export default function Reservations() {
                       disabled={isProcessing}
                       className="px-10 py-5 bg-white text-black font-bold uppercase tracking-widest hover:bg-ember transition-all flex items-center gap-3 disabled:opacity-50"
                     >
-                      {isProcessing ? 'Synchronizing...' : (
+                      {isProcessing ? 'Processing...' : (
                         <>
                           <CreditCard className="w-4 h-4" />
-                          Complete Induction
+                          Pay & Confirm
                         </>
                       )}
                     </button>
@@ -274,14 +274,14 @@ export default function Reservations() {
                 <div className="w-20 h-20 bg-ember/20 border border-ember rounded-full flex items-center justify-center mx-auto mb-8">
                   <CheckCircle className="w-8 h-8 text-ember" />
                 </div>
-                <h2 className="text-4xl font-light italic uppercase tracking-tighter mb-4">Journey Initialized</h2>
+                <h2 className="text-4xl font-light italic uppercase tracking-tighter mb-4">Booking Confirmed</h2>
                 <p className="text-white/40 text-[10px] uppercase tracking-widest mb-10 max-w-sm mx-auto leading-relaxed">
-                  Your seat at the hearth is secured for {formData.date} at {formData.time}. A verification pulse has been sent.
+                  Your table at the hearth is secured for {formData.date} at {formData.time}. A confirmation email has been sent.
                 </p>
                 <div className="p-8 glass-effect rounded-3xl max-w-sm mx-auto text-left mb-12 border-dashed">
                    <div className="flex justify-between items-center mb-4">
                       <span className="text-[10px] font-mono uppercase text-white/40">Reference</span>
-                      <span className="text-xs font-mono text-ember uppercase">ZH-{Math.random().toString(36).substr(2, 6).toUpperCase()}</span>
+                      <span className="text-xs font-mono text-ember uppercase">Booking ID: {Math.random().toString(36).substr(2, 6).toUpperCase()}</span>
                    </div>
                    <div className="space-y-2 text-sm font-mono uppercase tracking-widest text-white/80">
                       <div>{formData.guests} Guests</div>
@@ -292,7 +292,7 @@ export default function Reservations() {
                    onClick={() => window.location.href = '/'}
                    className="text-ember font-mono text-xs uppercase tracking-[0.2em] hover:text-white transition-colors"
                 >
-                  Return to Matrix
+                  Return Home
                 </button>
               </motion.div>
             )}
@@ -304,15 +304,15 @@ export default function Reservations() {
            <div className="flex gap-4">
               <Flame className="w-5 h-5 text-ember shrink-0" />
               <div>
-                <h5 className="text-[10px] font-mono uppercase tracking-widest text-white mb-2">Heat Protocol</h5>
-                <p className="text-xs font-light leading-relaxed">We require arrival 15 minutes prior to induction. Tardiness results in cooling of the primordial base.</p>
+                <h5 className="text-[10px] font-mono uppercase tracking-widest text-white mb-2">Arrival Policy</h5>
+                <p className="text-xs font-light leading-relaxed">Please arrive 15 minutes before your reservation. Late arrivals may affect your dining experience.</p>
               </div>
            </div>
            <div className="flex gap-4">
               <Users className="w-5 h-5 text-ember shrink-0" />
               <div>
-                <h5 className="text-[10px] font-mono uppercase tracking-widest text-white mb-2">Dress Constraint</h5>
-                <p className="text-xs font-light leading-relaxed">Attire should reflect the refinement of Abuja: Architectural, sharp, or monochromatic.</p>
+                <h5 className="text-[10px] font-mono uppercase tracking-widest text-white mb-2">Dress Code</h5>
+                <p className="text-xs font-light leading-relaxed">Attire should reflect the refinement of Abuja: Smart, elegant, or monochromatic.</p>
               </div>
            </div>
         </div>

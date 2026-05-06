@@ -90,15 +90,16 @@ export default function Layout() {
             {user ? (
               <div className="flex items-center gap-4 pl-4 border-l border-white/10">
                 <div className="flex flex-col items-end">
-                  <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Operator</span>
-                  <span className="text-[10px] font-medium text-white truncate max-w-[100px]">{user.displayName}</span>
+                  <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Account</span>
+                  <span className="text-[10px] font-medium text-white truncate max-w-[100px]">{user.displayName || user.email?.split('@')[0]}</span>
                 </div>
                 <button 
                   onClick={() => logout()}
-                  className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-500/20 hover:border-red-500/50 transition-all group"
-                  title="Sever Connection"
+                  className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center gap-2 hover:bg-red-500/20 hover:border-red-500/50 transition-all text-white/40 hover:text-red-400 group"
+                  title="Logout"
                 >
-                  <LogOut className="w-3.5 h-3.5 text-white/40 group-hover:text-red-400" />
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="text-[9px] font-bold uppercase tracking-widest">Logout</span>
                 </button>
               </div>
             ) : (
@@ -106,7 +107,7 @@ export default function Layout() {
                 to="/login"
                 className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-ember hover:text-white transition-colors"
               >
-                <LogIn className="w-3.5 h-3.5" /> Login
+                <LogIn className="w-3.5 h-3.5" /> Sign In
               </Link>
             )}
           </div>
@@ -158,15 +159,15 @@ export default function Layout() {
                       <UserIcon className="w-6 h-6 text-ember" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Identified As</p>
-                      <p className="text-xl font-display text-white">{user.displayName}</p>
+                      <p className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Signed In As</p>
+                      <p className="text-xl font-display text-white">{user.displayName || user.email?.split('@')[0]}</p>
                     </div>
                   </div>
                   <button 
                     onClick={() => logout()}
-                    className="p-4 rounded-2xl bg-red-900/10 border border-red-900/20 text-red-400"
+                    className="flex items-center gap-2 px-6 py-4 rounded-2xl bg-red-900/10 border border-red-900/20 text-red-400 font-bold uppercase text-xs tracking-widest"
                   >
-                    <LogOut className="w-6 h-6" />
+                    <LogOut className="w-5 h-5" /> Logout
                   </button>
                 </div>
               ) : (
@@ -174,7 +175,7 @@ export default function Layout() {
                   to="/login"
                   className="mt-10 flex items-center justify-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/10 text-xl font-display text-white"
                 >
-                  <LogIn className="w-6 h-6 text-ember" /> Authenticate Identity
+                  <LogIn className="w-6 h-6 text-ember" /> Sign In
                 </Link>
               )}
             </div>
@@ -202,15 +203,15 @@ export default function Layout() {
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Kitchen Status: Operational</span>
+            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Status: Online</span>
           </div>
           <div className="hidden sm:flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Gemini Core: Active</span>
+            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Kitchen: Active</span>
           </div>
           <div className="hidden sm:flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-white/20 rounded-full"></div>
-            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Supabase DB: Linked</span>
+            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">System: Secure</span>
           </div>
         </div>
         
@@ -220,7 +221,7 @@ export default function Layout() {
             <a href="#" className="text-white/30 hover:text-white transition-colors"><Facebook className="w-4 h-4" /></a>
           </div>
           <div className="text-[9px] text-white/20 uppercase tracking-[0.4em]">
-            &copy; 2026 Zuma Hearth • Maitama, Abuja • Powered by Gemini 3 Flash
+            &copy; 2026 Zuma Hearth • Maitama, Abuja • Crafted with Precision
           </div>
         </div>
       </footer>

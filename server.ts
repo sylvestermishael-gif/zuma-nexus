@@ -39,7 +39,7 @@ try {
   db = getFirestore(adminApp, databaseId);
   authAdmin = getAuth(adminApp);
 } catch (error: any) {
-  console.error("Nexus initialization failed:", error);
+  console.error("System initialization failed:", error);
   // Total fallback
   adminApp = admin.apps.length ? admin.app() : admin.initializeApp();
   db = getFirestore(adminApp);
@@ -60,13 +60,13 @@ async function startServer() {
       online: true, 
       timestamp: FieldValue.serverTimestamp() 
     }, { merge: true });
-    console.log("Nexus Link: Stable connection verified.");
+    console.log("System Link: Stable connection verified.");
   } catch (err: any) {
     const isNotFoundError = err.message.includes("NOT_FOUND") || err.code === 5;
     const isPermissionDenied = err.message.includes("PERMISSION_DENIED") || err.code === 7;
 
     if ((isNotFoundError || isPermissionDenied) && databaseId) {
-      console.warn(`Nexus Alert: Database [${databaseId}] is ${isNotFoundError ? 'missing' : 'restricted'}. Rerouting to (default) database.`);
+      console.warn(`System Alert: Database [${databaseId}] is ${isNotFoundError ? 'missing' : 'restricted'}. Rerouting to (default) database.`);
       db = getFirestore(adminApp);
       try {
         await db.collection("system_check").doc("status").set({ 
@@ -75,12 +75,12 @@ async function startServer() {
           rerouted: true,
           previousError: err.message
         }, { merge: true });
-        console.log("Nexus Link: Rerouted connection stable.");
+        console.log("System Link: Rerouted connection stable.");
       } catch (innerErr: any) {
-        console.error("Nexus Link: Total database failure. Check Firebase Project setup.", innerErr.message);
+        console.error("System Link: Total database failure. Check Firebase Project setup.", innerErr.message);
       }
     } else {
-      console.error("Nexus Link: Connectivity check error:", err.message);
+      console.error("System Link: Connectivity check error:", err.message);
     }
   }
 

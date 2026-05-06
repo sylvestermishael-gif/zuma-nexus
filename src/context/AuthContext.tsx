@@ -11,7 +11,8 @@ import {
   signInWithEmailLink,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendEmailVerification
+  sendEmailVerification,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 
@@ -22,6 +23,7 @@ interface AuthContextType {
   sendMagicLink: (email: string) => Promise<void>;
   signUp: (email: string, pass: string) => Promise<void>;
   logIn: (email: string, pass: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -98,6 +100,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.error("Password Reset Error:", error);
+      throw error;
+    }
+  };
+
   const sendMagicLink = async (email: string) => {
     const actionCodeSettings = {
       // Return to the current domain's login page
@@ -123,7 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, sendMagicLink, signUp, logIn, logout }}>
+    <AuthContext.Provider value={{ user, loading, signInWithGoogle, sendMagicLink, signUp, logIn, resetPassword, logout }}>
       {children}
     </AuthContext.Provider>
   );

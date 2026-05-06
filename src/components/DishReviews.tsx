@@ -78,11 +78,11 @@ export const DishReviews: React.FC<DishReviewsProps> = ({ dishId }) => {
       await fetchReviews();
     } catch (error: any) {
       console.error("Failed to submit review", error);
-      let message = "Transmission failed. Please check your connectivity.";
+      let message = "Post failed. Please check your connection.";
       try {
         const parsed = JSON.parse(error.message);
         if (parsed.error.includes('permission-denied')) {
-          message = "Security block: Ensure your data follows protocol (valid name and comment).";
+          message = "Submission failed: Ensure all fields are filled correctly.";
         }
       } catch (e) { /* fallback */ }
       setError(message);
@@ -115,7 +115,7 @@ export const DishReviews: React.FC<DishReviewsProps> = ({ dishId }) => {
               ))}
             </div>
             <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">
-              {reviews.length} Collective Reviews
+              {reviews.length} Reviews
             </p>
           </div>
         </div>
@@ -130,7 +130,7 @@ export const DishReviews: React.FC<DishReviewsProps> = ({ dishId }) => {
               : "bg-ember text-black font-bold border border-ember shadow-[0_0_20px_rgba(242,125,38,0.2)]"
           )}
         >
-          {showForm ? 'Abort Review' : 'Enact Review Protocol'}
+          {showForm ? 'Cancel' : 'Write a Review'}
         </motion.button>
       </div>
 
@@ -160,7 +160,7 @@ export const DishReviews: React.FC<DishReviewsProps> = ({ dishId }) => {
                 animate={{ opacity: 1, y: 0 }}
                 className="p-3 bg-emerald-900/20 border border-emerald-900/50 rounded-xl text-[10px] font-mono text-emerald-400 uppercase tracking-widest"
               >
-                Protocol Complete: Review Transmitted
+                Success: Review Posted
               </motion.div>
             )}
 
@@ -168,7 +168,7 @@ export const DishReviews: React.FC<DishReviewsProps> = ({ dishId }) => {
               <input 
                 required
                 type="text" 
-                placeholder="Reviewer ID (Name)"
+                placeholder="Your Name"
                 className="bg-white/5 border border-white/10 rounded-xl p-4 focus:outline-none focus:border-ember text-sm uppercase tracking-widest font-mono"
                 value={newReview.userName}
                 onChange={e => setNewReview({ ...newReview, userName: e.target.value })}
@@ -191,7 +191,7 @@ export const DishReviews: React.FC<DishReviewsProps> = ({ dishId }) => {
             </div>
             <textarea 
               required
-              placeholder="Observation notes..."
+              placeholder="Your review..."
               rows={3}
               className="w-full bg-white/5 border border-white/10 rounded-xl p-4 focus:outline-none focus:border-ember text-sm font-light leading-relaxed"
               value={newReview.comment}
@@ -204,7 +204,7 @@ export const DishReviews: React.FC<DishReviewsProps> = ({ dishId }) => {
               className="w-full py-4 bg-ember text-black font-bold uppercase tracking-widest hover:bg-white transition-all flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(242,125,38,0.2)]"
             >
               <Send className="w-4 h-4" /> 
-              {isSubmitting ? 'Transmitting...' : 'Commit Review Protocol'}
+              {isSubmitting ? 'Posting...' : 'Post Review'}
             </motion.button>
           </motion.form>
         )}
@@ -258,7 +258,7 @@ export const DishReviews: React.FC<DishReviewsProps> = ({ dishId }) => {
           <div className="text-center py-12 border border-dashed border-white/10 rounded-2xl">
             <MessageSquare className="w-8 h-8 text-white/10 mx-auto mb-4" />
             <p className="text-[10px] font-mono uppercase tracking-widest text-white/30">
-              No field reports available for this sequence.
+              No reviews yet for this dish.
             </p>
           </div>
         )}

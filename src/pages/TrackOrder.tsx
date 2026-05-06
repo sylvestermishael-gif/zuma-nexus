@@ -25,11 +25,11 @@ export default function TrackOrder() {
   const { orderId } = useParams();
   const [courierPos, setCourierPos] = useState<[number, number]>([37.78, -122.42]);
   const [destination] = useState<[number, number]>([37.76, -122.41]);
-  const [status, setStatus] = useState('Inducting');
+  const [status, setStatus] = useState('Processing');
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const statuses = ['Inducting', 'Igniting', 'In Transit', 'Approaching', 'Arrived'];
+    const statuses = ['Preparing', 'Cooking', 'In Transit', 'Approaching', 'Arrived'];
     let currentIdx = 0;
 
     const interval = setInterval(() => {
@@ -85,7 +85,7 @@ export default function TrackOrder() {
               iconAnchor: [20, 40]
             })}
           >
-            <Popup>Chef Emissary (In Transit)</Popup>
+            <Popup>Your Order (In Transit)</Popup>
           </MarkerAny>
           <MapUpdater center={courierPos} />
         </MapContainerAny>
@@ -97,8 +97,8 @@ export default function TrackOrder() {
                 <Flame className="w-6 h-6 text-black" />
               </div>
               <div>
-                <h4 className="text-xs font-mono uppercase text-ember tracking-widest">Active Induction</h4>
-                <p className="text-lg font-display uppercase italic tracking-tighter">Emissary ZH-9</p>
+                <h4 className="text-xs font-mono uppercase text-ember tracking-widest">Active Delivery</h4>
+                <p className="text-lg font-display uppercase italic tracking-tighter">Zuma Delivery</p>
               </div>
            </div>
         </div>
@@ -107,17 +107,17 @@ export default function TrackOrder() {
       {/* Right: Info Panel */}
       <div className="w-full md:w-[400px] bg-obsidian p-8 md:p-12 overflow-y-auto order-1 md:order-2 flex flex-col h-1/2 md:h-full">
         <div className="mb-12">
-          <Link to="/" className="text-[10px] font-mono text-white/30 uppercase tracking-[0.4em] hover:text-ember transition-colors mb-8 block">Back into Matrix</Link>
-          <h1 className="text-3xl font-display font-medium uppercase italic tracking-tighter mb-2">Tracking Pulse</h1>
+          <Link to="/" className="text-[10px] font-mono text-white/30 uppercase tracking-[0.4em] hover:text-ember transition-colors mb-8 block">Back Home</Link>
+          <h1 className="text-3xl font-display font-medium uppercase italic tracking-tighter mb-2">Track Order</h1>
           <span className="text-xs font-mono text-ember flex items-center gap-2">
-            Order Ref: {orderId} <span className="w-1 h-1 bg-ember rounded-full animate-ping" />
+            Reference: {orderId} <span className="w-1 h-1 bg-ember rounded-full animate-ping" />
           </span>
         </div>
 
         <div className="space-y-10 flex-1">
           <div className="space-y-2">
              <div className="flex justify-between items-end mb-2">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-white/40">Induction State</span>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-white/40">Status</span>
                 <span className="text-xl font-display uppercase italic tracking-tight text-ember">{status}</span>
              </div>
              <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
@@ -135,8 +135,8 @@ export default function TrackOrder() {
                    <Clock className="w-4 h-4 text-white/50" />
                 </div>
                 <div>
-                   <h6 className="text-[10px] font-mono uppercase text-white/30 tracking-widest mb-1">Estimated Fusion</h6>
-                   <p className="text-sm font-medium">12 - 18 Microcycles (Mins)</p>
+                   <h6 className="text-[10px] font-mono uppercase text-white/30 tracking-widest mb-1">Estimated Arrival</h6>
+                   <p className="text-sm font-medium">12 - 18 Minutes</p>
                 </div>
              </div>
              <div className="flex gap-4">
@@ -144,7 +144,7 @@ export default function TrackOrder() {
                    <MapPin className="w-4 h-4 text-white/50" />
                 </div>
                 <div>
-                   <h6 className="text-[10px] font-mono uppercase text-white/30 tracking-widest mb-1">Target Coordinate</h6>
+                   <h6 className="text-[10px] font-mono uppercase text-white/30 tracking-widest mb-1">Delivery Address</h6>
                    <p className="text-sm font-medium">San Francisco, CA</p>
                 </div>
              </div>
@@ -153,8 +153,8 @@ export default function TrackOrder() {
                    <ShieldCheck className="w-4 h-4 text-white/50" />
                 </div>
                 <div>
-                   <h6 className="text-[10px] font-mono uppercase text-white/30 tracking-widest mb-1">Thermal Integrity</h6>
-                   <p className="text-sm font-medium text-green-400">Stable @ 180°C</p>
+                   <h6 className="text-[10px] font-mono uppercase text-white/30 tracking-widest mb-1">Temperature</h6>
+                   <p className="text-sm font-medium text-green-400">Hot & Fresh</p>
                 </div>
              </div>
           </div>
@@ -162,7 +162,7 @@ export default function TrackOrder() {
 
         <div className="pt-10 border-t border-white/5 mt-auto">
           <button className="w-full flex items-center justify-center gap-3 py-4 border border-white/10 rounded-xl text-xs font-mono uppercase tracking-widest hover:border-ember transition-colors">
-            <Phone className="w-4 h-4" /> Signal Emissary
+            <Phone className="w-4 h-4" /> Call Driver
           </button>
         </div>
       </div>

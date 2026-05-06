@@ -26,7 +26,7 @@ export default function Story() {
              initial={{ opacity: 0, y: 20 }}
              animate={{ opacity: 1, y: 0 }}
           >
-            <span className="text-[10px] font-mono uppercase tracking-[0.6em] text-ember mb-6 block">Origin Narrative</span>
+            <span className="text-[10px] font-mono uppercase tracking-[0.6em] text-ember mb-6 block">Our Journey</span>
             <h1 className="text-5xl md:text-8xl font-light italic tracking-tighter uppercase leading-none underline underline-offset-12 decoration-ember/20">The <span className="font-bold not-italic text-ember">Ember</span> Code</h1>
           </motion.div>
         </div>
@@ -45,7 +45,7 @@ export default function Story() {
             <div className="p-10 glass-effect rounded-[2rem] border-white/5 shadow-xl">
                <Target className="w-8 h-8 text-ember mb-6" />
                <h3 className="text-xl font-light italic uppercase tracking-tight mb-4 text-white">The Precision</h3>
-               <p className="text-[10px] uppercase tracking-widest leading-relaxed">We use thermal imaging and AI-coupled sensors to monitor each micron of the cooking surface.</p>
+               <p className="text-[10px] uppercase tracking-widest leading-relaxed">We use thermal imaging and high-precision sensors to monitor the exact profile of the cooking surface.</p>
             </div>
             <div className="p-10 glass-effect rounded-[2.5rem] border-white/5 shadow-xl">
                <Wind className="w-8 h-8 text-ember mb-6" />
@@ -59,7 +59,7 @@ export default function Story() {
       {/* Visionaries */}
       <section className="py-32 px-6 bg-obsidian/40 backdrop-blur-md border-t border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
-           <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-ember mb-16 block">The Architects</span>
+           <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-ember mb-16 block">The Team</span>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
               <div className="relative group">
                 <div className="absolute -inset-8 bg-ember/5 blur-[100px] group-hover:bg-ember/10 transition-all" />
@@ -74,7 +74,7 @@ export default function Story() {
                 <h2 className="text-5xl font-light italic uppercase tracking-tighter">Aris Thorne</h2>
                 <h4 className="text-[10px] font-mono uppercase tracking-[0.4em] text-ember">Founder & Culinary Director</h4>
                 <p className="text-white/40 font-light leading-relaxed text-xl italic">
-                  "Fire is the only honest medium. It doesn't lie about timing or quality. At Zuma, we have simply given the fire a brain."
+                  "Fire is the only honest medium. It doesn't lie about timing or quality. At Zuma, we have mastered its rhythm."
                 </p>
                 <div className="p-8 glass-effect rounded-3xl border-white/5">
                   <p className="text-[10px] uppercase tracking-widest text-white/50 leading-relaxed">

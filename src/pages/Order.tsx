@@ -31,15 +31,15 @@ export default function Order() {
     return (
       <div className="pt-40 pb-20 text-center min-h-screen bg-black flex flex-col items-center justify-center">
         <div className="w-12 h-12 border-2 border-ember border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Synchronizing Identity...</p>
+        <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Loading Your Account...</p>
       </div>
     );
   }
 
   if (!user) return null;
 
-  const inductionFee = 7500;
-  const grandTotal = total + inductionFee;
+  const deliveryFee = 7500;
+  const grandTotal = total + deliveryFee;
 
   const config = {
     reference: (new Date()).getTime().toString(),
@@ -70,7 +70,7 @@ export default function Order() {
     
     if (formData.payment === 'card') {
       if (!config.publicKey || config.publicKey === 'pk_test_placeholder') {
-        alert("Payment System Offline: VITE_PAYSTACK_PUBLIC_KEY is not configured in environment settings.");
+        alert("Payment System Offline: Please contact support or use a different payment method.");
         setIsOrdering(false);
         return;
       }
@@ -80,7 +80,7 @@ export default function Order() {
         initializePayment({ onSuccess, onClose });
       } catch (err) {
         console.error("Payment Initialization Error:", err);
-        alert("Nexus Protocol Failure: Could not initialize payment gateway.");
+        alert("Payment process failed. Please try again or use a different card.");
         setIsOrdering(false);
       }
     } else {
@@ -100,15 +100,15 @@ export default function Order() {
         <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
           <ShoppingBag className="w-8 h-8 text-white/20" />
         </div>
-        <h2 className="text-3xl font-display font-medium uppercase italic tracking-tighter mb-4">The Void is Empty</h2>
+        <h2 className="text-3xl font-display font-medium uppercase italic tracking-tighter mb-4">Your Cart is Empty</h2>
         <p className="text-white/50 mb-10 max-w-sm mx-auto leading-relaxed">
-          Your culinary selection is currently absent. Return to the manifesto to select your primordial base.
+          Your culinary selection is currently empty. Visit our menu to add some of our signature dishes.
         </p>
         <button
           onClick={() => navigate('/menu')}
           className="px-10 py-5 bg-ember text-black font-bold uppercase tracking-widest hover:bg-white transition-all ember-glow"
         >
-          Explore Manifesto
+          Explore Menu
         </button>
       </div>
     );
@@ -129,9 +129,9 @@ export default function Order() {
             <div>
               <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-ember mb-6 block">Order Summary</span>
               <h1 className="text-6xl md:text-8xl font-light italic tracking-tighter uppercase mb-6 decoration-ember/20 underline underline-offset-8">
-                The <span className="font-bold not-italic text-white/90">Acquisition.</span>
+                Your <span className="font-bold not-italic text-white/90">Order.</span>
               </h1>
-              <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest">Verify your culinary requirements for induction</p>
+              <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest">Review your items before checkout</p>
             </div>
 
             <div className="space-y-8">
@@ -142,7 +142,7 @@ export default function Order() {
                   </div>
                   <div className="flex-1">
                     <h4 className="text-xl font-light italic uppercase tracking-tight mb-2">{item.dish.name}</h4>
-                    <p className="text-[10px] uppercase tracking-widest text-white/30 font-mono">Quantum Units: {item.quantity}</p>
+                    <p className="text-[10px] uppercase tracking-widest text-white/30 font-mono">Quantity: {item.quantity}</p>
                   </div>
                   <div className="text-lg font-mono text-ember font-medium tracking-tighter">
                     {formatCurrency(item.dish.price * item.quantity)}
@@ -153,15 +153,15 @@ export default function Order() {
 
             <div className="pt-10 border-t border-white/10 space-y-6">
                <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-[0.4em] text-white/40">
-                  <span>Subtotal Matrix</span>
+                  <span>Subtotal</span>
                   <span className="text-white/60">{formatCurrency(total)}</span>
                </div>
                <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-[0.4em] text-white/40">
-                  <span>Induction Fee Matrix</span>
+                  <span>Delivery Fee</span>
                   <span className="text-white/60">{formatCurrency(7500)}</span>
                </div>
                <div className="flex justify-between items-end pt-8">
-                  <span className="text-xs font-mono uppercase tracking-[0.6em] text-ember font-bold">Total Induction Value</span>
+                  <span className="text-xs font-mono uppercase tracking-[0.6em] text-ember font-bold">Total Amount</span>
                   <span className="text-5xl font-mono text-white tracking-tighter decoration-ember/20 underline underline-offset-8">
                     {formatCurrency(total + 7500)}
                   </span>
@@ -179,12 +179,12 @@ export default function Order() {
               <div className="space-y-10">
                 <div>
                   <label className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.4em] text-ember mb-6">
-                    <Mail className="w-3 h-3" /> Digital Essence (Email)
+                    <Mail className="w-3 h-3" /> Email Address
                   </label>
                   <input 
                     required
                     type="email" 
-                    placeholder="Subject Email" 
+                    placeholder="Enter your email" 
                     className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white focus:outline-none focus:border-ember transition-all placeholder:text-white/10 font-mono text-[10px] uppercase tracking-widest"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -193,12 +193,12 @@ export default function Order() {
 
                 <div>
                   <label className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.4em] text-ember mb-6">
-                    <MapPin className="w-3 h-3" /> Delivery Coordinate
+                    <MapPin className="w-3 h-3" /> Delivery Address
                   </label>
                   <input 
                     required
                     type="text" 
-                    placeholder="Subject Destination" 
+                    placeholder="Street, City, Area" 
                     className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white focus:outline-none focus:border-ember transition-all placeholder:text-white/10 font-mono text-[10px] uppercase tracking-widest"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -207,10 +207,10 @@ export default function Order() {
 
                 <div>
                   <label className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.4em] text-ember mb-6">
-                    <CreditCard className="w-3 h-3" /> Protocol Frequency
+                    <CreditCard className="w-3 h-3" /> Payment Method
                   </label>
                   <div className="grid grid-cols-2 gap-4">
-                    {['card', 'ember-pay'].map(m => (
+                    {['card', 'zuma-pay'].map(m => (
                        <button
                          key={m}
                          type="button"
@@ -220,7 +220,7 @@ export default function Order() {
                            formData.payment === m ? 'bg-white text-black border-white shadow-xl' : 'border-white/10 bg-white/5 text-white/40 hover:border-white/30'
                          )}
                        >
-                         {m}
+                         {m === 'zuma-pay' ? 'Zuma Pay' : 'Card'}
                        </button>
                     ))}
                   </div>
@@ -228,12 +228,12 @@ export default function Order() {
 
                 <div>
                   <label className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.4em] text-ember mb-6">
-                     Communication Channel
+                     Phone Number
                   </label>
                   <input 
                     required
                     type="tel" 
-                    placeholder="Terminal frequency (phone)" 
+                    placeholder="Enter your phone number" 
                     className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white focus:outline-none focus:border-ember transition-all placeholder:text-white/10 font-mono text-[10px] uppercase tracking-widest"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -247,13 +247,13 @@ export default function Order() {
                   className="w-full py-6 bg-white text-black font-bold uppercase tracking-[0.4em] hover:bg-ember transition-all shadow-2xl flex items-center justify-center gap-4 group rounded-2xl text-[10px]"
                 >
                   {isOrdering ? (
-                    <>Consulting Matrices...</>
+                    <>Processing...</>
                   ) : (
-                    <>Initiate Induction <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" /></>
+                    <>Complete Order <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" /></>
                   )}
                 </button>
                 <p className="text-center text-[8px] font-mono text-white/20 uppercase tracking-[0.4em]">
-                   Secure point-to-point encryption confirmed
+                   Securely processed and encrypted
                 </p>
               </div>
             </form>

@@ -14,14 +14,14 @@ export default function Menu() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
-  const categories = ['all', 'primordial', 'elemental', 'afterglow', 'libations'];
+  const categories = ['all', 'Starters', 'Mains', 'Desserts', 'Sides'];
 
   const categoryColors: Record<string, { top: string, bottom: string }> = {
     all: { top: 'bg-orange-900/10', bottom: 'bg-blue-900/5' },
-    primordial: { top: 'bg-orange-600/20', bottom: 'bg-red-900/10' },
-    elemental: { top: 'bg-blue-600/20', bottom: 'bg-cyan-900/10' },
-    afterglow: { top: 'bg-purple-600/20', bottom: 'bg-pink-900/10' },
-    libations: { top: 'bg-emerald-600/20', bottom: 'bg-green-900/10' },
+    Starters: { top: 'bg-orange-600/20', bottom: 'bg-red-900/10' },
+    Mains: { top: 'bg-blue-600/20', bottom: 'bg-cyan-900/10' },
+    Desserts: { top: 'bg-purple-600/20', bottom: 'bg-pink-900/10' },
+    Sides: { top: 'bg-emerald-600/20', bottom: 'bg-green-900/10' },
   };
 
   const filteredDishes = MENU_DATA.filter((dish) => {
@@ -51,9 +51,9 @@ export default function Menu() {
 
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 mb-12 relative z-10">
-        <span className="text-[10px] font-mono uppercase tracking-[0.6em] text-ember mb-4 block text-center">Culinary Archives</span>
+        <span className="text-[10px] font-mono uppercase tracking-[0.6em] text-ember mb-4 block text-center">Our Collection</span>
         <h1 className="text-6xl md:text-8xl font-light italic text-center uppercase tracking-tighter mb-12 decoration-ember/20 underline underline-offset-8">
-          The <span className="font-bold not-italic text-white/90">Sequence.</span>
+          The <span className="font-bold not-italic text-white/90">Menu.</span>
         </h1>
 
         {/* Filters & Search */}
@@ -110,7 +110,7 @@ export default function Menu() {
                     <img 
                       src={dish.image} 
                       alt={dish.name} 
-                      className="w-full h-full object-cover grayscale mix-blend-overlay group-hover:grayscale-0 group-hover:mix-blend-normal transition-all duration-1000 group-hover:scale-110" 
+                      className="w-full h-full object-cover group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -135,7 +135,7 @@ export default function Menu() {
                       onClick={() => addToCart(dish)}
                       className="flex-1 bg-white text-black hover:bg-ember transition-all py-4 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl"
                     >
-                      <Plus className="w-4 h-4" /> Add to Circuit
+                      <Plus className="w-4 h-4" /> Add to Order
                     </button>
                     <button 
                       onClick={() => handleOpenDish(dish)}
@@ -151,12 +151,12 @@ export default function Menu() {
         ) : (
           <div className="text-center py-40 glass-effect rounded-[3rem] border-dashed border-white/10">
             <Search className="w-12 h-12 text-white/10 mx-auto mb-6" />
-            <h3 className="text-xl font-light italic uppercase tracking-tighter text-white/40">No components found in this sector.</h3>
+            <h3 className="text-xl font-light italic uppercase tracking-tighter text-white/40">No dishes found matching your search.</h3>
             <button 
               onClick={() => {setActiveCategory('all'); setSearchQuery('');}}
               className="mt-6 text-ember uppercase text-[10px] font-mono tracking-widest hover:underline"
             >
-              Reset Search Matrix
+              Reset Search
             </button>
           </div>
         )}
@@ -201,7 +201,7 @@ export default function Menu() {
                 {cart.map((item) => (
                   <div key={item.dish.id} className="flex gap-4 items-center">
                     <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/10 shrink-0">
-                      <img src={item.dish.image} className="w-full h-full object-cover grayscale" referrerPolicy="no-referrer" alt="" />
+                      <img src={item.dish.image} className="w-full h-full object-cover" referrerPolicy="no-referrer" alt="" />
                     </div>
                     <div className="flex-1">
                       <h4 className="text-sm font-display font-medium uppercase tracking-tight mb-1">{item.dish.name}</h4>
@@ -257,7 +257,7 @@ export default function Menu() {
               
               <div className="flex flex-col md:flex-row w-full overflow-y-auto md:overflow-visible">
                 <div className="md:w-1/2 h-64 md:h-[auto] sticky top-0 md:relative">
-                  <img src={selectedDish.image} className="w-full h-full object-cover grayscale" referrerPolicy="no-referrer" alt="" />
+                  <img src={selectedDish.image} className="w-full h-full object-cover" referrerPolicy="no-referrer" alt="" />
                 </div>
                 <div className="md:w-1/2 p-10 pb-20 flex flex-col md:max-h-[90vh] md:overflow-y-auto scrollbar-hide">
                   <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-ember mb-4 block">{selectedDish.category}</span>
@@ -266,7 +266,7 @@ export default function Menu() {
                   
                   <div className="space-y-6 mb-12">
                     <div>
-                      <h4 className="text-[10px] font-mono uppercase tracking-widest text-white/30 mb-2">The Base</h4>
+                      <h4 className="text-[10px] font-mono uppercase tracking-widest text-white/30 mb-2">Description</h4>
                       <p className="text-white/70 font-light leading-relaxed">{selectedDish.description}</p>
                     </div>
                   </div>

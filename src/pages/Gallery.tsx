@@ -8,10 +8,10 @@ const IMAGES = [
   "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=2070",
   "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=2070",
   "https://images.unsplash.com/photo-1560624052-449f5ddf0c3d?auto=format&fit=crop&q=80&w=2070",
-  "https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&q=80&w=1920",
+  "https://images.unsplash.com/photo-1550966848-185d9afbcc4f?auto=format&fit=crop&q=80&w=1920",
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070",
   "https://images.unsplash.com/photo-1551218808-94e220e03182?auto=format&fit=crop&q=80&w=2070",
-  "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&q=80&w=1920"
+  "https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1920"
 ];
 
 export default function Gallery() {
@@ -20,9 +20,9 @@ export default function Gallery() {
   return (
     <div className="pt-24 pb-20 bg-black min-h-screen px-6">
       <div className="max-w-7xl mx-auto mb-20 text-center">
-        <span className="text-[10px] font-mono uppercase tracking-[0.6em] text-ember mb-6 block">Visual Fragments</span>
+        <span className="text-[10px] font-mono uppercase tracking-[0.6em] text-ember mb-6 block">Gallery Highlights</span>
         <h1 className="text-6xl md:text-8xl font-light italic tracking-tighter uppercase mb-6 decoration-ember/20 underline underline-offset-8">
-          The <span className="font-bold not-italic text-white/90">Observatory.</span>
+          Our <span className="font-bold not-italic text-white/90">Space.</span>
         </h1>
       </div>
 
@@ -42,7 +42,7 @@ export default function Gallery() {
           >
             <img 
               src={src} 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale hover:grayscale-0" 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
               alt={`Gallery ${i}`}
               referrerPolicy="no-referrer"
             />
